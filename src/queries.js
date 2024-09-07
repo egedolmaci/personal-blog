@@ -10,7 +10,7 @@ const PORT = process.env.PG_PORT;
 const poolConfig = {
   max: 5,
   min: 2,
-  idleTimeoutMillis,
+  idleTimeoutMillis: 600000,
 };
 
 poolConfig.connectionString = `postgres://${USERNAME}:${PASSWORD}@${HOST}:${PORT}/${DATABASE}`;
