@@ -9,13 +9,7 @@ app.get("/", (req, res) => {
   res.json({ welcome: "welcome" });
 });
 
-app.get("/users/", (req, res, next) => {
-  try {
-    throw new Error("Something went wrong while fething users");
-  } catch (error) {
-    next(error);
-  }
-});
+app.get("/users/", db.getUsers);
 
 app.get("/users/:id", db.getUserById);
 
