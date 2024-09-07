@@ -14,18 +14,9 @@ const pool = new Pool({
 //});
 
 const getUsers = (request, response) => {
-  try {
-    pool.query("SELECT * FROM users", (error, results) => {
-      if (error) {
-        console.error("Error executing query", error.stack); // Better error logging
-        response.status(500).send("An error occurred while fetching users");
-        return;
-      }
-      response.status(200).json(results.rows);
-    });
-  } catch (error) {
-    next(error);
-  }
+  pool.query("SELECT * FROM users", (error, results) => {
+    response.status(200).json(results.rows);
+  });
 };
 
 const getUserById = async (request, response, next) => {
