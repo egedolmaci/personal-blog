@@ -1,13 +1,23 @@
 const Pool = require("pg").Pool;
 const utils = require("./utils");
 
-const pool = new Pool({
-  user: "blog_admin",
-  host: "localhost",
-  database: "blog_api",
-  password: "blog_admin",
-  port: 5432,
-});
+const DATABASE = process.env.PG_DATABASE;
+const USERNAME = process.env.PG_USER;
+const PASSWORD = process.env.PG_PASSWORD;
+const HOST = process.env.PG_HOST;
+const PORT = process.env.PG_PORT;
+
+poolConfig.connectionString = `postgres://${USERNAME}:${PASSWORD}@${HOST}:${PORT}/${DATABASE}`;
+
+const pool = new Pool(poolConfig);
+
+//const pool = new Pool({
+//user: "blog_admin",
+//host: "localhost",
+//database: "blog_api",
+//password: "blog_admin",
+//port: 5432,
+//});
 
 const getUsers = (request, response) => {
   pool.query("SELECT * FROM users ORDER BY id ASC", (error, results) => {
