@@ -1,12 +1,6 @@
 const Pool = require("pg").Pool;
 const utils = require("./utils");
 
-const DATABASE = process.env.PG_DATABASE;
-const USERNAME = process.env.PG_USER;
-const PASSWORD = process.env.PG_PASSWORD;
-const HOST = process.env.PG_HOST;
-const PORT = process.env.PG_PORT;
-
 const pool = new Pool({
   connectionString: process.env.connectionStr,
 });
@@ -20,14 +14,18 @@ const pool = new Pool({
 //});
 
 const getUsers = (request, response) => {
-  pool.query("SELECT * FROM users ORDER BY id ASC", (error, results) => {
-    if (error) {
-      console.error("Error executing query", error.stack); // Better error logging
-      response.status(500).send("An error occurred while fetching users");
-      return;
-    }
-    response.status(200).json(results.rows);
-  });
+  try {
+    pool.query("SELECT * FROM users", (error, results) => {
+      if (error) {
+        console.error("Error executing query", error.stack); // Better error logging
+        response.status(500).send("An error occurred while fetching users");
+        return;
+      }
+      response.status(200).json(results.rows);
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 const getUserById = async (request, response, next) => {
