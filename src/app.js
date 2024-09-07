@@ -3,7 +3,7 @@ const app = express();
 
 const db = require("./queries");
 
-const PORT = 4000;
+const PORT = process.env.PORT || 5000;
 
 app.get("/", (req, res) => {
   res.json({ welcome: "welcome" });
