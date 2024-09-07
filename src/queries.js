@@ -1,5 +1,5 @@
-const { Pool } = require("pg");
-const utils = require("./utils"); // Ensure this is being used if needed
+const Pool = require("pg").Pool;
+const utils = require("./utils");
 
 const DATABASE = process.env.PG_DATABASE;
 const USERNAME = process.env.PG_USER;
@@ -7,26 +7,22 @@ const PASSWORD = process.env.PG_PASSWORD;
 const HOST = process.env.PG_HOST;
 const PORT = process.env.PG_PORT;
 
-// Set up the pool configuration
-const poolConfig = {
-  user: USERNAME,
-  host: HOST,
-  database: DATABASE,
-  password: PASSWORD,
-  port: PORT,
-  max: 5, // Max number of clients in the pool
-  min: 2, // Min number of clients in the pool
-  idleTimeoutMillis: 600000, // Connection idle timeout
-};
+const pool = new Pool({
+  connectionString: process.env.connectionStr,
+});
 
-// Create a new pool instance with the configuration
-const pool = new Pool(poolConfig);
+//const pool = new Pool({
+//user: "blog_admin",
+//host: "localhost",
+//database: "blog_api",
+//password: "blog_admin",
+//port: 5432,
+//});
 
-// Function to get all users
 const getUsers = (request, response) => {
   pool.query("SELECT * FROM users ORDER BY id ASC", (error, results) => {
     if (error) {
-      console.error("Error executing query", error.stack);
+      console.error("Error executing query", error.stack); // Better error logging
       response.status(500).send("An error occurred while fetching users");
       return;
     }
@@ -34,13 +30,12 @@ const getUsers = (request, response) => {
   });
 };
 
-// Function to get a user by ID
 const getUserById = async (request, response, next) => {
-  const id = parseInt(request.params.id, 10);
+  const id = parseInt(request.params.id, 10); // Ensure the ID is an integer
 
   try {
     if (id <= 0) {
-      return next(new Error("Invalid ID"));
+      return next(new Error("Invalid ID")); // Validate the ID before querying the database
     }
 
     // Query to get the maximum ID
@@ -48,7 +43,7 @@ const getUserById = async (request, response, next) => {
     const maxId = maxIdResult.rows[0].max_id;
 
     if (id > maxId) {
-      return next(new Error("ID exceeds the maximum allowed"));
+      return next(new Error("Id Exceeds")); // Validate the ID before querying the database
     }
 
     // Query to get the user by ID
@@ -57,13 +52,12 @@ const getUserById = async (request, response, next) => {
     ]);
 
     if (userResult.rows.length === 0) {
-      return response.status(404).json({ error: "User not found" });
+      return response.status(404).json({ error: "User not found" }); // Handle user not found
     }
 
-    response.status(200).json(userResult.rows[0]);
+    response.status(200).json(userResult.rows[0]); // Send user data
   } catch (error) {
-    console.error("Error fetching user by ID", error.stack); // Better error logging
-    next(error);
+    next(error); // Pass errors to the error-handling middleware
   }
 };
 
