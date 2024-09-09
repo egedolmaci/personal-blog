@@ -5,6 +5,8 @@ const db = require("./queries");
 
 const PORT = process.env.PORT || 5000;
 
+app.use(express.json());
+
 app.get("/", (req, res) => {
   res.json({ welcome: "welcome" });
 });
@@ -12,6 +14,8 @@ app.get("/", (req, res) => {
 app.get("/posts/", db.getPosts);
 
 app.get("/posts/:id", db.getPostsById);
+
+app.post("/posts", db.createUser);
 
 app.use((err, req, res, next) => {
   console.error(err.stack); // Log error stack for debugging

@@ -50,4 +50,24 @@ const getPostsById = async (request, response, next) => {
   }
 };
 
-module.exports = { getPosts, getPostsById };
+const createUser = (req, res, next) => {
+  const { title, content, author } = req.body;
+
+  try {
+    pool.query(
+      "insert into users (title, content, author) values($1, $2, $3)",
+      [title, content, author],
+      (error, results) => {
+        if (error) {
+          throw error;
+        }
+
+        response.status(201).send("User added with ID: ${results.insertID}");
+      },
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { getPosts, getPostsById, createUser };
