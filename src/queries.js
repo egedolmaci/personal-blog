@@ -87,10 +87,11 @@ const deletePost = (req, res, next) => {
 
 const updatePost = (req, res, next) => {
   const id = parseInt(req.params.id);
+  const { title, content, author } = req.body;
   try {
     pool.query(
       "update posts set title = $1, content = $2, author = $3",
-      [title, email, id],
+      [title, content, author],
       (error, results) => {
         if (error) {
           throw error;
