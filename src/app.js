@@ -9,9 +9,9 @@ app.get("/", (req, res) => {
   res.json({ welcome: "welcome" });
 });
 
-app.get("/users/", db.getUsers);
+app.get("/posts/", db.getPosts);
 
-app.get("/users/:id", db.getUserById);
+app.get("/posts/:id", db.getPostsById);
 
 app.use((err, req, res, next) => {
   console.error(err.stack); // Log error stack for debugging
