@@ -62,7 +62,7 @@ const createUser = (req, res, next) => {
           throw error;
         }
 
-        response.status(201).send("User added with ID: ${results.insertID}");
+        res.status(201).send(`User added with ID: ${results.insertID}`);
       },
     );
   } catch (error) {
