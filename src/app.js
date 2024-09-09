@@ -17,7 +17,7 @@ app.get("/posts/:id", db.getPostsById);
 
 app.post("/posts", db.createPost);
 
-app.delete("posts/:id", db.deletePost);
+app.delete("/posts/:id", db.deletePost);
 
 app.use((err, req, res, next) => {
   console.error(err.stack); // Log error stack for debugging
