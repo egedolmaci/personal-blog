@@ -55,7 +55,7 @@ const createUser = (req, res, next) => {
 
   try {
     pool.query(
-      "insert into users (title, content, author) values($1, $2, $3)",
+      "insert into posts (title, content, author) values($1, $2, $3)",
       [title, content, author],
       (error, results) => {
         if (error) {
