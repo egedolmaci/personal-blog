@@ -50,7 +50,7 @@ const getPostsById = async (request, response, next) => {
   }
 };
 
-const createUser = (req, res, next) => {
+const createPost = (req, res, next) => {
   const { title, content, author } = req.body;
 
   try {
@@ -70,4 +70,19 @@ const createUser = (req, res, next) => {
   }
 };
 
-module.exports = { getPosts, getPostsById, createUser };
+const deletePost = (req, res, next) => {
+  const id = parseInt(req.params.id);
+  try {
+    pool.query("delete from posts where id = $1", [id], (error, resulsts) => {
+      if (error) {
+        throw error;
+      }
+
+      res.status(200).send(`User deleted with ID: ${id}`);
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { getPosts, getPostsById, createPost, deletePost };
