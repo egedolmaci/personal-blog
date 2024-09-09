@@ -85,4 +85,23 @@ const deletePost = (req, res, next) => {
   }
 };
 
-module.exports = { getPosts, getPostsById, createPost, deletePost };
+const updatePost = (req, res, next) => {
+  const id = parseInt(req.params.id);
+  try {
+    pool.query(
+      "update posts set title = $1, content = $2, author = $3",
+      [title, email, id],
+      (error, results) => {
+        if (error) {
+          throw error;
+        }
+
+        res.status(200).send(results.rows);
+      },
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { getPosts, getPostsById, createPost, deletePost, updatePost };
